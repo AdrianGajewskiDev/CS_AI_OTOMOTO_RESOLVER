@@ -1,0 +1,60 @@
+{
+    "ProviderName": "Otomoto",
+    "HomeUrl": "https://www.otomoto.pl",
+    "SearchUrl": "https://www.otomoto.pl/",
+    "SearchRules": {
+        "Base": {
+            "Type": "UrlPart",
+            "Value": "<Type>/<Make>/<Model>"
+        },
+        "ProductionYearFrom": {
+            "Type": "UrlPart",
+            "Value": "od-<ProductionYearFrom>"
+        },
+        "ProductionYearTo": {
+            "Type": "QueryString",
+            "Value": "search[filter_float_year:to]=<ProductionYearTo>"
+        },
+        "MileageFrom": {
+            "Type": "QueryString",
+            "Value": "search[filter_float_mileage:from]=<MileageFrom>"
+        },
+        "MileageTo": {
+            "Type": "QueryString",
+            "Value": "search[filter_float_mileage:to]=<MileageTo>"
+        },
+        "Generation": {
+            "Type": "QueryString",
+            "Value": "search[filter_enum_generation]=<Generation>"
+        }
+    },
+    "DesiredTag": "article",
+    "DesiredAttributes": {
+        "class": [
+            "ooa-yca59n efpuxbr0"
+        ]
+    },
+    "AdInfoSelectors": {
+        "Price": "article > section > div.ooa-1a2gnf2.efpuxbr5 > div.ooa-vtik1a.e1g449iu0 > div.ooa-2p9dfw.efpuxbr4 > h3",
+        "PriceCurrency": "article > section > div.ooa-1a2gnf2.efpuxbr5 > div.ooa-vtik1a.e1g449iu0 > div.ooa-2p9dfw.efpuxbr4 > p",
+        "Mileage": "article > section > div.ooa-d3dp2q.efpuxbr2 > dl.ooa-1uwk9ii.efpuxbr11 > dd:nth-child(2)",
+        "ProductionYear": "article > section > div.ooa-d3dp2q.efpuxbr2 > dl.ooa-1uwk9ii.efpuxbr11 > dd:nth-child(8)",
+        "FuelType": "article > section > div.ooa-d3dp2q.efpuxbr2 > dl.ooa-1uwk9ii.efpuxbr11 > dd:nth-child(4)",
+        "Details": "article.ooa-yca59n.efpuxbr0 section.ooa-qat6iw.efpuxbr1 div.ooa-1qo9a0p.efpuxbr6 p.efpuxbr10.ooa-1tku07r.er34gjf0",
+        "Transmision": "article > section > div.ooa-d3dp2q.efpuxbr2 > dl.ooa-1uwk9ii.efpuxbr11 > dd:nth-child(6)"
+    },
+    "Strategy": {
+        "Iterations": 4,
+        "Rules": [
+            {
+                "Type": "AppendToQuery",
+                "Value": "search[order]=filter_float_price=desc"
+            },
+            {
+                "Type": "AppendToQuery",
+                "Value": "search[order]=filter_float_price=asc"
+            }
+        ]
+    }
+}
+
