@@ -5,7 +5,9 @@ from typing import Any, List
 from bs4 import BeautifulSoup
 
 from otomoto_resolver.logging.logger import InternalLogger
+from otomoto_resolver.models.fuel_types import map_fuel_type
 from otomoto_resolver.models.resolver_rules import FieldTypes, NamedFields, ResolverRule, ResolverStrategy, TypedResolverRule
+from otomoto_resolver.models.transmissions import map_transmission
 from otomoto_resolver.response_models.resolver_response import ResolverResponse
 
 class Resolver():
@@ -118,8 +120,8 @@ class OtomotoResolver(Resolver):
                     PriceCurrency=price_currency.text if price_currency else "",
                     Mileage=mileage.text if mileage else "",
                     ProductionYear=production_year.text if production_year else "",
-                    FuelType=fuel_type.text if fuel_type else "",
-                    Transmision=transmision.text if transmision else "",
+                    FuelType=map_fuel_type(fuel_type.text) if fuel_type else "",
+                    Transmision=map_transmission(transmision.text) if transmision else "",
                     HorsePower=horse_power if horse_power else "",
                     Capacity=capacity if capacity else ""
                 ).json())

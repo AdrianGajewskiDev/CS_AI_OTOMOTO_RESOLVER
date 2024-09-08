@@ -6,10 +6,10 @@ class Transmissions(StrEnum):
     AUTOMATIC = "Automatic"
 
 def map_transmission(transmission: str) -> Transmissions:
-    if transmission == "manual":
+    if transmission == "Manualna":
         return Transmissions.MANUAL
     
-    if transmission == "automatic":
+    if transmission == "Automatyczna":
         return Transmissions.AUTOMATIC
     
     raise ValueError(f"Unknown transmission: {transmission}")

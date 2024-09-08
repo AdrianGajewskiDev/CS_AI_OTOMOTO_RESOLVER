@@ -8,7 +8,7 @@ class FuelType(StrEnum):
     Electric = "Electric"
     Etanol = "Etanol"
     Hybrid = "Hybrid"
-    Plugin_Hybrid = "Hybrid_Plug-in"
+    Plugin_Hybrid = "Hybrid_Plug_in"
     Hydrogen = "Hydrogen"
 
 def map_fuel_type(fuel_type: str) -> FuelType:
