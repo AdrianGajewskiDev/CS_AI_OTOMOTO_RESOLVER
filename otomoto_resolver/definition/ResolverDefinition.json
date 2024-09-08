@@ -11,9 +11,9 @@
             "Type": "UrlPart",
             "Value": "od-<ProductionYearFrom>"
         },
-        "ProductionYearTo": {
+        "Generation": {
             "Type": "QueryString",
-            "Value": "search[filter_float_year:to]=<ProductionYearTo>"
+            "Value": "search[filter_enum_generation]=<Generation>"
         },
         "MileageFrom": {
             "Type": "QueryString",
@@ -23,9 +23,14 @@
             "Type": "QueryString",
             "Value": "search[filter_float_mileage:to]=<MileageTo>"
         },
-        "Generation": {
+        "ProductionYearTo": {
             "Type": "QueryString",
-            "Value": "search[filter_enum_generation]=<Generation>"
+            "Value": "search[filter_float_year:to]=<ProductionYearTo>"
+        },
+        "Order": {
+            "Static": true,
+            "Type": "QueryString",
+            "Value": "search[order]=created_at:desc"
         }
     },
     "DesiredTag": "article",
@@ -44,7 +49,7 @@
         "Transmision": "article > section > div.ooa-d3dp2q.efpuxbr2 > dl.ooa-1uwk9ii.efpuxbr11 > dd:nth-child(6)"
     },
     "Strategy": {
-        "Iterations": 4,
+        "Iterations": 5,
         "Rules": [
             {
                 "Type": "AppendToQuery",

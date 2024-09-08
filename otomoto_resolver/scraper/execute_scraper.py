@@ -1,5 +1,7 @@
+from itertools import chain
 import json
 import os
+from typing import List
 
 import requests
 from otomoto_resolver.logging.logger import InternalLogger
@@ -11,11 +13,10 @@ OXYLABS_USERNAME = os.environ["OXYLABS_USERNAME"]
 OXYLABS_PASSWORD = os.environ["OXYLABS_PASSWORD"]
 OXYLABS_BASE_URL = os.environ["OXYLABS_BASE_URL"]
 
-def execute_scraper(task_id: str, resolver: OtomotoResolver, seed_data: dict) -> dict:
+def execute_scraper(resolver: OtomotoResolver, seed_data: dict):
     pages: list = []
     resolver.resolve_url(seed_data)
-    InternalLogger.LogInfo("First resolved url: {}".format(resolver.get_resolved_url()))
-    for it in range(0, resolver.get_strategy().Iterations):
+    for it in range(0, resolver.get_strategy().Iterations - 1):
         resolver.execute_strategy({"page_index": it + 1})
         resolved_url = resolver.get_resolved_url()
         payload = {
@@ -31,14 +32,10 @@ def execute_scraper(task_id: str, resolver: OtomotoResolver, seed_data: dict) ->
         html = results[0].get("content")
         body = extract_body_content(html)
         html_data = resolver.scrap_data_from_html(body)
+        InternalLogger.LogInfo(f"Extracted data from page {len(html_data)}")
         pages.extend(html_data)
-    
-    s3_content = {
-        "task_id": task_id,
-        "content": [json.dumps(page.json()) for page in pages if page]
-    }
 
-    return write_result_to_s3(s3_content, key="{}/{}/{}.json".format(task_id, "otomoto", "result"))
+    return pages
 
 def extract_body_content(html_content):
     soup = BeautifulSoup(html_content, "html.parser")

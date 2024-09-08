@@ -42,16 +42,18 @@ class Resolver():
                 self._fill_base_fields(rule, seed_data)
                 search_part += rule.Rule.Value
                 continue
+            
+            if not rule.Rule.Static:
+                _ptrn = seed_data[rule.Field]
 
-            _ptrn = seed_data[rule.Field]
-
-            if not _ptrn:
+            if not _ptrn and not rule.Rule.Static:
                 InternalLogger.LogInfo(f"Could not find value for field: {rule.Field}")
                 continue
-
-            rule_new_value = self._replace_value(rule.Rule.Value, f"<{rule.Field}>", _ptrn)
-            rule.Rule.Value = rule_new_value
-
+            
+            if not rule.Rule.Static:  
+                rule_new_value = self._replace_value(rule.Rule.Value, f"<{rule.Field}>", _ptrn)
+                rule.Rule.Value = rule_new_value
+            
             first_query_in_url = rule.Rule.Type == FieldTypes.QueryString and _prev_rule.Rule.Type == FieldTypes.UrlPart 
             if first_query_in_url:
                 search_part += "?"
@@ -94,9 +96,9 @@ class Resolver():
         pass
 
 class OtomotoResolver(Resolver):
-    def scrap_data_from_html(self, html_content: str) -> List[ResolverResponse]:
+    def scrap_data_from_html(self, html_content: str) -> List[dict]:
         desired_content = self.extract_desired_content(html_content, self._desired_tag, self._desired_attributes)
-        result: List[ResolverResponse] = []
+        result: List[dict] = []
         for count, cnt in enumerate(desired_content):
             price = self.get_by_selector(cnt, self._info_selectors["Price"])
             price_currency = self.get_by_selector(cnt, self._info_selectors["PriceCurrency"])
@@ -108,16 +110,19 @@ class OtomotoResolver(Resolver):
             isalnum = ''.join(e for e in details.text if e.isalnum())
             horse_power = self.get_from_regex(r'\d{3}KM', isalnum)
             capacity = self.get_from_regex(r"\d+cm3", isalnum)
-            result.append(ResolverResponse(
-                Price=price.text if price else "",
-                PriceCurrency=price_currency.text if price_currency else "",
-                Mileage=mileage.texti if mileage else "",
-                ProductionYear=production_year.text if production_year else "",
-                FuelType=fuel_type.text if fuel_type else "",
-                Transmision=transmision.text if transmision else "",
-                HorsePower=horse_power if horse_power else "",
-                Capacity=capacity if capacity else ""
-            ))
+
+
+            if all([price, price_currency, mileage, production_year, fuel_type, details, transmision, horse_power, capacity]):
+                result.append(ResolverResponse(
+                    Price=price.text if price else "",
+                    PriceCurrency=price_currency.text if price_currency else "",
+                    Mileage=mileage.text if mileage else "",
+                    ProductionYear=production_year.text if production_year else "",
+                    FuelType=fuel_type.text if fuel_type else "",
+                    Transmision=transmision.text if transmision else "",
+                    HorsePower=horse_power if horse_power else "",
+                    Capacity=capacity if capacity else ""
+                ).json())
 
         return result
 

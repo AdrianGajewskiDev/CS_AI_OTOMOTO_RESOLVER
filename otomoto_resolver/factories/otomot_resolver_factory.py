@@ -47,7 +47,8 @@ def _get_strategy(strategy: dict) -> ResolverStrategy:
     for rule in rules:
         _rules.append(ResolverRule(
             Type=rule["Type"],
-            Value=rule["Value"]
+            Value=rule["Value"],
+            Static=rule["Static"] if "Static" in rule else False
         ))
     
     return ResolverStrategy(
