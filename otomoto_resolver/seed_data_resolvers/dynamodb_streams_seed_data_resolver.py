@@ -29,7 +29,7 @@ class DynamoDBStreamsSeedDataResolver(SeedDataResolver):
                 "EngineCapacity": seed_data["EngineCapacity"],
                 "Transmission": seed_data["Transmission"],
                 "EnginePower": seed_data["EnginePower"],
-                "Generation": seed_data["Generation"]
+                "Generation": seed_data["Generation"] if "Generation" in seed_data else None,
             },
             "task_id": data["task_id"]["S"],
             "created_date": data["created_date"]["S"]

@@ -11,6 +11,11 @@ from otomoto_resolver.services.ResultWriterService import ResultWriterService
 
 def startup_scraper(seed_data_resolver: SeedDataResolver, result_writer_service: ResultWriterService) -> None:
     seed_data = seed_data_resolver.get_seed_data()
+
+    if not seed_data:
+        InternalLogger.LogInfo("No seed data found. Exiting.")
+        return
+
     InternalLogger.LogInfo(f"Starting scraper with seed data: {seed_data}")
 
     resolver = create_otomoto_resolver()
