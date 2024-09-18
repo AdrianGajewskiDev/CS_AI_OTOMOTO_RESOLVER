@@ -15,7 +15,7 @@ class LambdaEventSeedDataResolver(SeedDataResolver):
 
         return {
             "seed_data": {
-                "Type": seed_data["Type"],
+                "Type": "osobowe",
                 "Make": seed_data["Make"],
                 "Model": seed_data["Model"],
                 "ProductionYear": seed_data["ProductionYear"],
