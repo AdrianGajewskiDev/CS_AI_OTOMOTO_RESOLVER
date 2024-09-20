@@ -4,6 +4,7 @@ import os
 from typing import List
 
 from otomoto_resolver.models.resolver_rules import ResolverRule, ResolverStrategy, TypedResolverRule
+from otomoto_resolver.resolver.otomoto_api_resolver import OtomotoApiResolver
 from otomoto_resolver.resolver.otomoto_resolver import OtomotoResolver
 
 definition_file_path = os.environ["LAMBDA_TASK_ROOT"] + "/otomoto_resolver/definition/ResolverDefinition.json"
@@ -55,3 +56,6 @@ def _get_strategy(strategy: dict) -> ResolverStrategy:
         Iterations=iterations,
         Rules=_rules
     )
+
+def create_otomoto_api_resolver() -> OtomotoApiResolver:
+    return OtomotoApiResolver()

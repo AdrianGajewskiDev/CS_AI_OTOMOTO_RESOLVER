@@ -6,26 +6,26 @@ from bs4 import BeautifulSoup
 
 from otomoto_resolver.logging.logger import InternalLogger
 from otomoto_resolver.models.fuel_types import map_fuel_type
-from otomoto_resolver.models.resolver_rules import FieldTypes, NamedFields, ResolverRule, ResolverStrategy, TypedResolverRule
+from otomoto_resolver.models.resolver_rules import FieldTypes, NamedFields, ResolverStrategy, TypedResolverRule
 from otomoto_resolver.models.transmissions import map_transmission
 from otomoto_resolver.response_models.resolver_response import ResolverResponse
 
 class Resolver():
-    def __init__(self, base_url: str, desired_tag: str, desired_attributes: dict, info_selectors: dict, strategy: ResolverStrategy, rs_rules: List[TypedResolverRule]):
-        self._resolver_rules = rs_rules
-        self._base_url = base_url
-        self._desired_attributes = desired_attributes
-        self._desired_tag = desired_tag
-        self._info_selectors = info_selectors
-        self._strategy = strategy
+    _resolved_url: str
 
+    def resolve_url(self, seed_data: defaultdict) -> str:
+        pass
+
+    def get_resolved_url(self) -> str:
+        return self._resolved_url  
+    
+class OtomotoResolver(Resolver):
     _resolver_rules: List[TypedResolverRule]
     _base_url: str
     _desired_tag: str
     _desired_attributes: dict
     _info_selectors: dict
     _strategy: ResolverStrategy
-    _resolved_url: str
     pattern = "{}{}"
 
     def get_strategy(self) -> ResolverStrategy:
@@ -49,10 +49,10 @@ class Resolver():
                 _ptrn = seed_data[rule.Field]
 
             if not _ptrn and not rule.Rule.Static:
-                InternalLogger.LogInfo(f"Could not find value for field: {rule.Field}")
+                InternalLogger.LogDebug(f"Could not find value for field: {rule.Field}")
                 continue
             
-            if not rule.Rule.Static:  
+            if not rule.Rule.Static:
                 rule_new_value = self._replace_value(rule.Rule.Value, f"<{rule.Field}>", _ptrn)
                 rule.Rule.Value = rule_new_value
             
@@ -91,13 +91,6 @@ class Resolver():
         soup = BeautifulSoup(str(html_content), "html.parser")
         return soup.select_one(selector)
 
-    def scrap_data_from_html(self, html_content: str):
-        pass
-
-    def execute_strategy(self, seed_data: dict):
-        pass
-
-class OtomotoResolver(Resolver):
     def scrap_data_from_html(self, html_content: str) -> List[dict]:
         desired_content = self.extract_desired_content(html_content, self._desired_tag, self._desired_attributes)
         result: List[dict] = []

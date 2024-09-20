@@ -8,12 +8,12 @@ class DynamoDBStreamsSeedDataResolver(SeedDataResolver):
         self.event = event
 
     def get_seed_data(self) -> dict:
-        InternalLogger.LogInfo("Getting seed data from DynamoDB Streams event. {}".format(json.dumps(self.event)))        
+        InternalLogger.LogDebug("Getting seed data from DynamoDB Streams event. {}".format(json.dumps(self.event)))        
         record = self.event["Records"][0]
         event_type = record["eventName"]
 
         if event_type != "INSERT":
-            InternalLogger.LogInfo("Event type is not INSERT. Skipping event processing.")
+            InternalLogger.LogDebug("Event type is not INSERT. Skipping event processing.")
             return {}
         
         data = record["dynamodb"]["NewImage"]

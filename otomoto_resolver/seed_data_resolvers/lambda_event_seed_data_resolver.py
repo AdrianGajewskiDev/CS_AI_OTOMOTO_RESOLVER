@@ -8,7 +8,7 @@ class LambdaEventSeedDataResolver(SeedDataResolver):
         self.event = event
 
     def get_seed_data(self) -> dict:
-        InternalLogger.LogInfo("Getting seed data from lambda event. {}".format(json.dumps(self.event)))        
+        InternalLogger.LogDebug("Getting seed data from lambda event. {}".format(json.dumps(self.event)))        
         seed_data = self.event["seed_data"]
         task_id = self.event["task_id"]
         created_date = self.event["created_date"]

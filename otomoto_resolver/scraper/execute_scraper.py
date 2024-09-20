@@ -23,7 +23,7 @@ def execute_scraper(resolver: OtomotoResolver, seed_data: dict):
             "source": "universal",
             "url": resolved_url,
         }        
-        InternalLogger.LogInfo(f"Resolved url: {resolved_url}")
+        InternalLogger.LogDebug(f"Resolved url: {resolved_url}")
         result = requests.post(url=OXYLABS_BASE_URL, data=json.dumps(payload), auth=(OXYLABS_USERNAME, OXYLABS_PASSWORD))
         result_json = result.json()
         results = result_json.get("results", [])
@@ -32,7 +32,7 @@ def execute_scraper(resolver: OtomotoResolver, seed_data: dict):
         html = results[0].get("content")
         body = extract_body_content(html)
         html_data = resolver.scrap_data_from_html(body)
-        InternalLogger.LogInfo(f"Extracted data from page {len(html_data)}")
+        InternalLogger.LogDebug(f"Extracted data from page {len(html_data)}")
         pages.extend(html_data)
 
     return pages

@@ -13,21 +13,21 @@ def startup_scraper(seed_data_resolver: SeedDataResolver, result_writer_service:
     seed_data = seed_data_resolver.get_seed_data()
 
     if not seed_data:
-        InternalLogger.LogInfo("No seed data found. Exiting.")
+        InternalLogger.LogDebug("No seed data found. Exiting.")
         return
 
-    InternalLogger.LogInfo(f"Starting scraper with seed data: {seed_data}")
+    InternalLogger.LogDebug(f"Starting scraper with seed data: {seed_data}")
 
     resolver = create_otomoto_resolver()
-    InternalLogger.LogInfo(f"Resolver created: {resolver.__dict__}")
+    InternalLogger.LogDebug(f"Resolver created: {resolver.__dict__}")
 
     scraped_data = execute_scraper(resolver, transform_seed_data(seed_data))
 
-    InternalLogger.LogInfo(f"Scraped data: {len(scraped_data)}")
+    InternalLogger.LogDebug(f"Scraped data: {len(scraped_data)}")
 
     s3_content = build_s3_content_from_scraped_data(seed_data["task_id"], scraped_data)
 
-    InternalLogger.LogInfo(f"Writing result to S3")
+    InternalLogger.LogDebug(f"Writing result to S3")
     result_writer_service.write_result(s3_content, key="{}/{}/{}.json".format(seed_data["task_id"], "otomoto", "result"))
 
 def build_s3_content_from_scraped_data(task_id: str, scraped_data: list) -> dict:
