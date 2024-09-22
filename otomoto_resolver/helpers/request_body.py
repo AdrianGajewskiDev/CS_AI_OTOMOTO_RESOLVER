@@ -48,6 +48,10 @@ def build_request_body(seed_data: dict, page_number: int = 1) -> dict:
                 {
                     "name": "order",
                     "value": "created_at:desc"
+                },
+                {
+                    "name": "filter_enum_generation",
+                    "value": seed_data.get("Generation")
                 }
                 ],
                 "includeCepik": True,
