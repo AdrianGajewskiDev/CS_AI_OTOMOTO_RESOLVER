@@ -25,7 +25,7 @@ def startup_api_scraper(seed_data_resolver: SeedDataResolver, result_writer_serv
     
     s3_content = {
         "task_id": seed_data["task_id"],
-        "content": [json.dumps(page) for page in add_data if page]
+        "content": [page for page in add_data if page]
     }
     result_writer_service.write_result(s3_content, key="{}/{}/{}.json".format(seed_data["task_id"], "otomoto", "result"))
     InternalLogger.LogDebug("Result written to S3")
