@@ -10,3 +10,4 @@ class ResolverResponse(BaseModel):
     Transmision: Optional[str] = None
     HorsePower: Optional[str] = None
     Capacity: Optional[str] = None
+    AdvertisementLink: Optional[str] = None

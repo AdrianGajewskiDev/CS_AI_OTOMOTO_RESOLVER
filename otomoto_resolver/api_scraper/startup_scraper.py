@@ -60,7 +60,8 @@ def extract_add_data(scraped_data: List[dict]) -> list:
                     FuelType=get_from_params(node["parameters"], "fuel_type"),
                     Transmision=get_from_params(node["parameters"], "gearbox"),
                     HorsePower=get_from_params(node["parameters"], "engine_power"),
-                    Capacity=get_from_params(node["parameters"], "engine_capacity")
+                    Capacity=get_from_params(node["parameters"], "engine_capacity"),
+                    AdvertisementLink=node["url"]
                 ).json())
 
     return add_data
