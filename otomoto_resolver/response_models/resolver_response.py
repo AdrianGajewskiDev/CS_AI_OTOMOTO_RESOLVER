@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 from pydantic import BaseModel
 
 class ResolverResponse(BaseModel): 
@@ -11,3 +11,5 @@ class ResolverResponse(BaseModel):
     HorsePower: Optional[str] = None
     Capacity: Optional[str] = None
     AdvertisementLink: Optional[str] = None
+    Thumbnails: Optional[List[str]] = None
+    Source: str = "https://www.otomoto.pl"

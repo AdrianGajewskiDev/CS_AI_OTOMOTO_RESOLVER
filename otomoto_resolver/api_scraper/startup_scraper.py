@@ -61,7 +61,8 @@ def extract_add_data(scraped_data: List[dict]) -> list:
                     Transmision=get_from_params(node["parameters"], "gearbox"),
                     HorsePower=get_from_params(node["parameters"], "engine_power"),
                     Capacity=get_from_params(node["parameters"], "engine_capacity"),
-                    AdvertisementLink=node["url"]
+                    AdvertisementLink=node["url"],
+                    Thumbnails=[node.get("thumbnail", {}).get("x1", ""), node.get("thumbnail", {}).get("x2", "")]
                 ).json())
 
     return add_data
