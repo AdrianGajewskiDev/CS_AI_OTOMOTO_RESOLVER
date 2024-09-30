@@ -43,7 +43,7 @@ def build_request_body(seed_data: dict, page_number: int = 1) -> dict:
                 },
                 {
                     "name": "filter_float_mileage:to",
-                    "value": str(int(seed_data.get("ProductionYear")) + 200000)
+                    "value": str(int(seed_data.get("Mileage")) + 200000)
                 },
                 {
                     "name": "order",
