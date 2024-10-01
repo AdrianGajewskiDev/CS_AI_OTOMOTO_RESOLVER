@@ -27,7 +27,7 @@ class LambdaEventSeedDataResolver(SeedDataResolver):
                 "EngineCapacity": seed_data["EngineCapacity"],
                 "Transmission": seed_data["Transmission"],
                 "EnginePower": seed_data["EnginePower"],
-                "Generation": transform_generation(make, model, seed_data["Generation"]) if "Generation" in seed_data and seed_data else None,
+                "Generation": transform_generation(make, model, seed_data["Generation"]) if "Generation" in seed_data and seed_data["Generation"] else None,
             },
             "task_id": task_id,
             "created_date": created_date
