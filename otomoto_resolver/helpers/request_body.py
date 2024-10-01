@@ -1,3 +1,6 @@
+from otomoto_resolver.logging.logger import InternalLogger
+
+
 def build_request_body(seed_data: dict, page_number: int = 1) -> dict:
     filters = [
         {
@@ -30,11 +33,14 @@ def build_request_body(seed_data: dict, page_number: int = 1) -> dict:
         }
     ]
 
-    if seed_data.get("Generation", ""):
+    generation = seed_data.get("Generation", "")
+    if generation:
         filters.append({
             "name": "filter_enum_generation",
             "value": seed_data.get("Generation")
         })
+
+    InternalLogger.LogDebug(f"Building request body with filters: {filters}")
     
     return {
             "operationName": "listingScreen",

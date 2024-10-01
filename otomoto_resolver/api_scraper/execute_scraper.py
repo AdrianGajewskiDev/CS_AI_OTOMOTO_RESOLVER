@@ -10,8 +10,12 @@ def execute_api_scraper(resolver: OtomotoApiResolver, seed_data: dict):
     body = build_request_body(seed_data)
     rec_data = resolver.send_reconnaissance_request(body)
     total_count = rec_data["data"]["advertSearch"]["totalCount"]
-    pages = round(total_count / PAGE_SIZE)
-    bodies = [build_request_body(seed_data, page) for page in range(1, pages)]
+
+    if total_count > 0 and total_count < PAGE_SIZE:
+        pages = 1
+    else:
+        pages = round(total_count / PAGE_SIZE)
+    bodies = [build_request_body(seed_data, page) for page in range(pages)]
 
     InternalLogger.LogDebug("Scraping data from otomoto api.")
     InternalLogger.LogDebug(f"Total pages: {pages}")
