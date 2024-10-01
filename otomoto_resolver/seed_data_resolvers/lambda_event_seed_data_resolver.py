@@ -37,7 +37,7 @@ def transform(make: str) -> str:
     _val = make.replace(" ", "")
     return re.sub(r'(?<!^)(?=[A-Z])', '-', _val).lower()
 
-def transform_generation(make: str, model: str, generation: str) -> str:
+def transform_generation(make: str, model: str, generation: str | None) -> str:
     template_file_path = os.environ["LAMBDA_TASK_ROOT"] + "/otomoto_resolver/templates/{}.json".format(make.lower())
 
     with open(template_file_path) as f:
@@ -47,11 +47,15 @@ def transform_generation(make: str, model: str, generation: str) -> str:
     InternalLogger.LogInfo("Searching for generation: {}".format(generation))
     InternalLogger.LogInfo("Searching for model: {}".format(model))
     results = template["results"]
-    url = [data["url"] for data in results if data["model"] == model.upper() and data["generation"] == generation.upper()][0]
+    check_model_only = lambda x: x["model"] == model.upper()
+    check_model_and_generation = lambda x: x["model"] == model.upper() and x["generation"] == generation.upper()
+    check = check_model_and_generation if generation else check_model_only
+
+    url = [data["url"] for data in results if check(data)]
     if not url:
         raise Exception(f"Generation {generation} not found in template file")
     
-    unquoted = urllib.parse.unquote(url)
+    unquoted = urllib.parse.unquote(url[0])
     parsed = urllib.parse.urlparse(unquoted)
     return urllib.parse.parse_qs(parsed.query)["search[filter_enum_generation]"][0]
 
