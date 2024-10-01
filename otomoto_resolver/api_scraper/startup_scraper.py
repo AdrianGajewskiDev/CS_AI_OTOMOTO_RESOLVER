@@ -51,7 +51,6 @@ def extract_add_data(scraped_data: List[dict]) -> list:
                 if not node:
                         InternalLogger.LogDebug("No node found in edge. Skipping.")
                         continue
-                        
                 add_data.append(ResolverResponse(
                     Price=node["price"]["amount"]["value"],
                     PriceCurrency=node["price"]["amount"]["currencyCode"],
@@ -62,7 +61,7 @@ def extract_add_data(scraped_data: List[dict]) -> list:
                     HorsePower=get_from_params(node["parameters"], "engine_power"),
                     Capacity=get_from_params(node["parameters"], "engine_capacity"),
                     AdvertisementLink=node["url"],
-                    Thumbnails=[node.get("thumbnail", {}).get("x1", ""), node.get("thumbnail", {}).get("x2", "")]
+                    Thumbnails=[node.get("thumbnail", {}).get("x1", ""), node.get("thumbnail", {}).get("x2", "")] if isinstance(node.get("thumbnail"), dict) else []
                 ).json())
 
     return add_data
