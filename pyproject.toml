@@ -11,6 +11,7 @@ python = "^3.12"
 pydantic = "^1.5.1"
 beautifulsoup4 = "4.12.3"
 requests = "2.32.3"
+cs-ai-common = "^0.1.6"
 
 [tool.poetry.dev-dependencies]
 black = "^23.1.0"

@@ -1,11 +1,12 @@
 import json
-from typing import List
+from typing import Any, List
 from otomoto_resolver.api_scraper.execute_scraper import execute_api_scraper
 from otomoto_resolver.factories.otomot_resolver_factory import create_otomoto_api_resolver
 from otomoto_resolver.logging.logger import InternalLogger
 from otomoto_resolver.response_models.resolver_response import ResolverResponse
 from otomoto_resolver.seed_data_resolvers.seed_data_resolver import SeedDataResolver
 from otomoto_resolver.services.ResultWriterService import ResultWriterService
+from cs_ai_common.typings.car_utils import Transmisions, FuelTypes
 
 
 def startup_api_scraper(seed_data_resolver: SeedDataResolver, result_writer_service: ResultWriterService) -> None:
@@ -51,13 +52,14 @@ def extract_add_data(scraped_data: List[dict]) -> list:
                 if not node:
                         InternalLogger.LogDebug("No node found in edge. Skipping.")
                         continue
+                InternalLogger.LogDebug(f"Extracting data from node: {node}")
                 add_data.append(ResolverResponse(
                     Price=node["price"]["amount"]["value"],
                     PriceCurrency=node["price"]["amount"]["currencyCode"],
                     Mileage=get_from_params(node["parameters"], "mileage"),
                     ProductionYear=get_from_params(node["parameters"], "year"),
-                    FuelType=get_from_params(node["parameters"], "fuel_type"),
-                    Transmision=get_from_params(node["parameters"], "gearbox"),
+                    FuelType=FuelTypes.to_common(get_from_params(node["parameters"], "fuel_type", FuelTypes.PETROL)),
+                    Transmision=Transmisions.map_value_from(get_from_params(node["parameters"], "gearbox", Transmisions.MANUAL)),
                     HorsePower=get_from_params(node["parameters"], "engine_power"),
                     Capacity=get_from_params(node["parameters"], "engine_capacity"),
                     AdvertisementLink=node["url"],
@@ -66,8 +68,9 @@ def extract_add_data(scraped_data: List[dict]) -> list:
 
     return add_data
 
-def get_from_params(parameters: dict, key: str) -> str:
+def get_from_params(parameters: dict, key: str, default: Any | str = "") -> str:
     for param in parameters:
         if param["key"] == key:
             return param["value"]
-    return ""
+
+    return default
