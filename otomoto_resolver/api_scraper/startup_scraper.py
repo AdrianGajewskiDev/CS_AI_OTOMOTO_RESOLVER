@@ -7,7 +7,7 @@ from otomoto_resolver.response_models.resolver_response import ResolverResponse
 from otomoto_resolver.seed_data_resolvers.seed_data_resolver import SeedDataResolver
 from otomoto_resolver.services.ResultWriterService import ResultWriterService
 from cs_ai_common.typings.car_utils import Transmisions, FuelTypes
-
+from requests.exceptions import ProxyError
 
 def startup_api_scraper(seed_data_resolver: SeedDataResolver, result_writer_service: ResultWriterService) -> None:
     seed_data = seed_data_resolver.get_seed_data()

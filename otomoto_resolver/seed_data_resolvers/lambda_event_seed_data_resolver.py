@@ -43,9 +43,9 @@ def transform_generation(make: str, model: str, generation: str | None) -> str:
     with open(template_file_path) as f:
         template = json.load(f)
 
-    InternalLogger.LogInfo("Loaded template file: {}".format(template))
-    InternalLogger.LogInfo("Searching for generation: {}".format(generation))
-    InternalLogger.LogInfo("Searching for model: {}".format(model))
+    InternalLogger.LogDebug("Loaded template file: {}".format(template))
+    InternalLogger.LogDebug("Searching for generation: {}".format(generation))
+    InternalLogger.LogDebug("Searching for model: {}".format(model))
     results = template["results"]
     check_model_only = lambda x: x["model"] == model.upper()
     check_model_and_generation = lambda x: x["model"] == model.upper() and x["generation"] == generation.upper()
