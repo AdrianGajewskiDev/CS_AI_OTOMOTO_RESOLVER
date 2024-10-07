@@ -25,7 +25,7 @@ class LambdaEventSeedDataResolver(SeedDataResolver):
                 "FuelType": seed_data["FuelType"],
                 "Mileage": seed_data["Mileage"],
                 "EngineCapacity": seed_data["EngineCapacity"],
-                "Transmission": seed_data["Transmission"],
+                "Transmission": seed_data["Transmision"],
                 "EnginePower": seed_data["EnginePower"],
                 "Generation": transform_generation(make, model, seed_data["Generation"]) if "Generation" in seed_data and seed_data["Generation"] else None,
             },

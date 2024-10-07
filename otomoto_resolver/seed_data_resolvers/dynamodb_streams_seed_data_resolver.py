@@ -27,7 +27,7 @@ class DynamoDBStreamsSeedDataResolver(SeedDataResolver):
                 "FuelType": seed_data["FuelType"],
                 "Mileage": seed_data["Mileage"],
                 "EngineCapacity": seed_data["EngineCapacity"],
-                "Transmission": seed_data["Transmission"],
+                "Transmission": seed_data["Transmision"],
                 "EnginePower": seed_data["EnginePower"],
                 "Generation": seed_data["Generation"] if "Generation" in seed_data else None,
             },
