@@ -13,9 +13,9 @@ class LocalSeedDataResolver(SeedDataResolver):
                 "ProductionYear": 2014,
                 "FuelType": "Diesel",
                 "Mileage": 155000,
-                "EngineCapacity": 1993,
+                "Capacity": 1993,
                 "Transmission": "Manualna",
-                "EnginePower": 150,
+                "HorsePower": 150,
                 "Generation": "gen-8v-2012"
             },
             "task_id": str(uuid.uuid4()),
