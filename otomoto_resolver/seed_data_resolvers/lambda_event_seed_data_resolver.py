@@ -47,8 +47,9 @@ def transform_generation(make: str, model: str, generation: str | None) -> str:
     InternalLogger.LogDebug("Searching for generation: {}".format(generation))
     InternalLogger.LogDebug("Searching for model: {}".format(model))
     results = template["results"]
-    check_model_only = lambda x: x["model"] == model.upper()
-    check_model_and_generation = lambda x: x["model"] == model.upper() and x["generation"] == generation.upper()
+    model = model.replace(" ", "-").upper()
+    check_model_only = lambda x: x["model"].upper()  == model.upper()
+    check_model_and_generation = lambda x: x["model"].upper() == model.upper() and x["generation"].upper()  == generation.upper()
     check = check_model_and_generation if generation else check_model_only
 
     url = [data["url"] for data in results if check(data)]

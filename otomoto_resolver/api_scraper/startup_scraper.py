@@ -53,6 +53,12 @@ def extract_add_data(scraped_data: List[dict]) -> list:
                         InternalLogger.LogDebug("No node found in edge. Skipping.")
                         continue
                 InternalLogger.LogDebug(f"Extracting data from node: {node}")
+                ad_link = node.get("url")
+
+                if any(ad_link in json.loads(ad)["AdvertisementLink"] for ad in add_data):
+                    InternalLogger.LogDebug("Ad already in list. Skipping.")
+                    continue
+
                 add_data.append(ResolverResponse(
                     Price=node["price"]["amount"]["value"],
                     PriceCurrency=node["price"]["amount"]["currencyCode"],

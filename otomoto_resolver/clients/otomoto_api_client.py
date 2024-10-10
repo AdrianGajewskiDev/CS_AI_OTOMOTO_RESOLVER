@@ -25,7 +25,7 @@ class OtomotoApiClient:
         }
         
         return requests.post(self._base_url, data=json.dumps(body), headers=headers,
-                            proxies={"http": entry, "https": entry})
+                            proxies={"http": entry, "https": entry}, timeout=30)
     
     def send_query(self, body: dict) -> dict:
         response = self.query_otomoto_ads(body)
