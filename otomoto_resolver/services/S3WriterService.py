@@ -1,4 +1,4 @@
-from otomoto_resolver.s3.writer import write_result_to_s3
+from cs_ai_common.s3.resolver_results import write_result_to_s3
 from otomoto_resolver.services.ResultWriterService import ResultWriterService
 
 

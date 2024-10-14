@@ -2,7 +2,7 @@ import json
 from typing import Any, List
 from otomoto_resolver.api_scraper.execute_scraper import execute_api_scraper
 from otomoto_resolver.factories.otomot_resolver_factory import create_otomoto_api_resolver
-from otomoto_resolver.logging.logger import InternalLogger
+from cs_ai_common.logging.internal_logger import InternalLogger
 from otomoto_resolver.response_models.resolver_response import ResolverResponse
 from otomoto_resolver.seed_data_resolvers.seed_data_resolver import SeedDataResolver
 from otomoto_resolver.services.ResultWriterService import ResultWriterService
@@ -65,7 +65,7 @@ def extract_add_data(scraped_data: List[dict]) -> list:
                     Mileage=get_from_params(node["parameters"], "mileage"),
                     ProductionYear=get_from_params(node["parameters"], "year"),
                     FuelType=FuelTypes.to_common(get_from_params(node["parameters"], "fuel_type", FuelTypes.PETROL)),
-                    Transmision=Transmisions.map_value_from(get_from_params(node["parameters"], "gearbox", Transmisions.MANUAL)),
+                    Transmision=Transmisions.to_common(get_from_params(node["parameters"], "gearbox", Transmisions.MANUAL)),
                     HorsePower=get_from_params(node["parameters"], "engine_power"),
                     Capacity=get_from_params(node["parameters"], "engine_capacity"),
                     AdvertisementLink=node["url"],

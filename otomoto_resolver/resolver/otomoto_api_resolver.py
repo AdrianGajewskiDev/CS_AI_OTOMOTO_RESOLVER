@@ -1,6 +1,6 @@
 import os
 from otomoto_resolver.clients.otomoto_api_client import OtomotoApiClient
-from otomoto_resolver.logging.logger import InternalLogger
+from cs_ai_common.logging.internal_logger import InternalLogger
 from otomoto_resolver.resolver.otomoto_resolver import Resolver
 
 

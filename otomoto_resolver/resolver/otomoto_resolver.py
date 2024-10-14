@@ -4,7 +4,7 @@ from typing import Any, List
 
 from bs4 import BeautifulSoup
 
-from otomoto_resolver.logging.logger import InternalLogger
+from cs_ai_common.logging.internal_logger import InternalLogger
 from otomoto_resolver.models.fuel_types import map_fuel_type
 from otomoto_resolver.models.resolver_rules import FieldTypes, NamedFields, ResolverStrategy, TypedResolverRule
 from otomoto_resolver.models.transmissions import map_transmission

@@ -4,7 +4,7 @@ import os
 import requests
 
 from otomoto_resolver.clients.oxylabs_proxy_api_client import OxylabsProxyApiClient
-from otomoto_resolver.logging.logger import InternalLogger
+from cs_ai_common.logging.internal_logger import InternalLogger
 
 
 class OtomotoApiClient:

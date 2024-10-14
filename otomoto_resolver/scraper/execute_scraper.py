@@ -4,9 +4,8 @@ import os
 from typing import List
 
 import requests
-from otomoto_resolver.logging.logger import InternalLogger
+from cs_ai_common.logging.internal_logger import InternalLogger
 from otomoto_resolver.resolver.otomoto_resolver import OtomotoResolver
-from otomoto_resolver.s3.writer import write_result_to_s3
 from bs4 import BeautifulSoup
 
 OXYLABS_USERNAME = os.environ["OXYLABS_USERNAME"]

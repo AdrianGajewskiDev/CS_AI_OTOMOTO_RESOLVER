@@ -1,6 +1,6 @@
 import json
 import os
-from otomoto_resolver.logging.logger import InternalLogger
+from cs_ai_common.logging.internal_logger import InternalLogger
 from otomoto_resolver.seed_data_resolvers.seed_data_resolver import SeedDataResolver
 import re
 import urllib.parse

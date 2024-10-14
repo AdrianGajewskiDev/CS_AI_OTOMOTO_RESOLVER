@@ -1,7 +1,7 @@
 from concurrent.futures import ThreadPoolExecutor
 from otomoto_resolver.helpers.request_body import build_request_body
-from otomoto_resolver.logging.logger import InternalLogger
 from otomoto_resolver.resolver.otomoto_api_resolver import OtomotoApiResolver
+from cs_ai_common.logging.internal_logger import InternalLogger
 
 PAGE_SIZE = 32
 

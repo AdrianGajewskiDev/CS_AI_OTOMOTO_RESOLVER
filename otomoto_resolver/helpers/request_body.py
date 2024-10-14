@@ -1,4 +1,4 @@
-from otomoto_resolver.logging.logger import InternalLogger
+from cs_ai_common.logging.internal_logger import InternalLogger
 
 
 def build_request_body(seed_data: dict, page_number: int = 1) -> dict:
