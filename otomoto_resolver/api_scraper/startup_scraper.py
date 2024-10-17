@@ -3,6 +3,7 @@ from typing import Any, List
 from otomoto_resolver.api_scraper.execute_scraper import execute_api_scraper
 from otomoto_resolver.factories.otomot_resolver_factory import create_otomoto_api_resolver
 from cs_ai_common.logging.internal_logger import InternalLogger
+from otomoto_resolver.cache.get_cache import try_get_cache
 from otomoto_resolver.response_models.resolver_response import ResolverResponse
 from otomoto_resolver.seed_data_resolvers.seed_data_resolver import SeedDataResolver
 from otomoto_resolver.services.ResultWriterService import ResultWriterService
@@ -16,6 +17,13 @@ def startup_api_scraper(seed_data_resolver: SeedDataResolver, result_writer_serv
             return
 
     InternalLogger.LogDebug(f"Starting scraper with seed data: {seed_data}")
+    InternalLogger.LogDebug("Trying to get cache")
+    cache_key, cache_result = try_get_cache(seed_data["seed_data"])
+    InternalLogger.LogDebug(f"Cache key: {cache_key}")
+    if cache_result:
+        InternalLogger.LogDebug("Cache found. Returning cached result.")
+        result_writer_service.write_result(cache_result, key="{}/{}/{}.json".format(seed_data["task_id"], "otomoto", "result"))
+        return 0
 
     resolver  = create_otomoto_api_resolver()
     scraped_data = list(execute_api_scraper(resolver, seed_data["seed_data"]))
@@ -30,6 +38,9 @@ def startup_api_scraper(seed_data_resolver: SeedDataResolver, result_writer_serv
     }
     result_writer_service.write_result(s3_content, key="{}/{}/{}.json".format(seed_data["task_id"], "otomoto", "result"))
     InternalLogger.LogDebug("Result written to S3")
+    InternalLogger.LogDebug("Writing cache to S3")
+    result_writer_service.write_cache(s3_content, key=cache_key)
+    InternalLogger.LogDebug("Cache written to S3")
 
     return 0
 
