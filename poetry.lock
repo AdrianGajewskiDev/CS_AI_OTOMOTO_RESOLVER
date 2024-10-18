@@ -8,11 +8,11 @@ python-versions = ">=3.8"
 
 [[package]]
 name = "anyio"
-version = "4.6.2"
+version = "4.6.2.post1"
 description = "High level compatibility layer for multiple asynchronous event loop implementations"
 category = "main"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 
 [package.dependencies]
 idna = ">=2.8"
@@ -64,14 +64,14 @@ uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
 name = "boto3"
-version = "1.35.39"
+version = "1.35.43"
 description = "The AWS SDK for Python"
 category = "main"
 optional = false
 python-versions = ">=3.8"
 
 [package.dependencies]
-botocore = ">=1.35.39,<1.36.0"
+botocore = ">=1.35.43,<1.36.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.10.0,<0.11.0"
 
@@ -80,7 +80,7 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.35.39"
+version = "1.35.43"
 description = "Low-level, data-driven core of boto 3."
 category = "main"
 optional = false
@@ -104,7 +104,7 @@ python-versions = ">=3.6"
 
 [[package]]
 name = "charset-normalizer"
-version = "3.3.2"
+version = "3.4.0"
 description = "The Real First Universal Charset Detector. Open, modern and actively maintained alternative to Chardet."
 category = "main"
 optional = false
@@ -142,7 +142,7 @@ toml = ["tomli"]
 
 [[package]]
 name = "cs-ai-common"
-version = "0.2.1"
+version = "0.2.5"
 description = ""
 category = "main"
 optional = false
@@ -231,7 +231,7 @@ python-versions = ">=3.6"
 
 [[package]]
 name = "mypy"
-version = "1.11.2"
+version = "1.12.0"
 description = "Optional static typing for Python"
 category = "dev"
 optional = false
@@ -435,7 +435,7 @@ use-chardet-on-py3 = ["chardet (>=3.0.2,<6)"]
 
 [[package]]
 name = "s3transfer"
-version = "0.10.2"
+version = "0.10.3"
 description = "An Amazon S3 Transfer Manager"
 category = "main"
 optional = false
@@ -473,7 +473,7 @@ python-versions = ">=3.8"
 
 [[package]]
 name = "starlette"
-version = "0.39.2"
+version = "0.40.0"
 description = "The little ASGI library that shines."
 category = "main"
 optional = false
@@ -510,7 +510,7 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.12"
-content-hash = "5ec18340370c1e09c8429e5e3a1962517efb3c75cb4b92120c75b00637d04b47"
+content-hash = "9b1077344676aea2172feda61b75669b5a0674f88febd81de74b76a906ca83f3"
 
 [metadata.files]
 annotated-types = []

@@ -6,8 +6,8 @@ import os
 from otomoto_resolver.factories.otomot_resolver_factory import create_otomoto_resolver
 from cs_ai_common.logging.internal_logger import InternalLogger
 from otomoto_resolver.scraper.execute_scraper import execute_scraper
-from otomoto_resolver.seed_data_resolvers.seed_data_resolver import SeedDataResolver
-from otomoto_resolver.services.ResultWriterService import ResultWriterService
+from cs_ai_common.seed_data.seed_data_resolver import SeedDataResolver
+from cs_ai_common.services.result_writer_service import ResultWriterService
 
 def startup_scraper(seed_data_resolver: SeedDataResolver, result_writer_service: ResultWriterService) -> None:
     seed_data = seed_data_resolver.get_seed_data()

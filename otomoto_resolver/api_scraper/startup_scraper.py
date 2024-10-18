@@ -3,12 +3,12 @@ from typing import Any, List
 from otomoto_resolver.api_scraper.execute_scraper import execute_api_scraper
 from otomoto_resolver.factories.otomot_resolver_factory import create_otomoto_api_resolver
 from cs_ai_common.logging.internal_logger import InternalLogger
-from otomoto_resolver.cache.get_cache import try_get_cache
 from otomoto_resolver.response_models.resolver_response import ResolverResponse
-from otomoto_resolver.seed_data_resolvers.seed_data_resolver import SeedDataResolver
-from otomoto_resolver.services.ResultWriterService import ResultWriterService
+from cs_ai_common.seed_data.seed_data_resolver import SeedDataResolver
 from cs_ai_common.typings.car_utils import Transmisions, FuelTypes
-from requests.exceptions import ProxyError
+from cs_ai_common.services.result_writer_service import ResultWriterService
+from cs_ai_common.resolver_cache.try_get_cache import try_get_cache
+from cs_ai_common.dynamodb.resolver_task_table import insert_resolver_result_task
 
 def startup_api_scraper(seed_data_resolver: SeedDataResolver, result_writer_service: ResultWriterService) -> None:
     seed_data = seed_data_resolver.get_seed_data()
@@ -18,10 +18,14 @@ def startup_api_scraper(seed_data_resolver: SeedDataResolver, result_writer_serv
 
     InternalLogger.LogDebug(f"Starting scraper with seed data: {seed_data}")
     InternalLogger.LogDebug("Trying to get cache")
-    cache_key, cache_result = try_get_cache(seed_data["seed_data"])
+    cache_key, cache_result = try_get_cache(seed_data["seed_data"], "otomoto")
     InternalLogger.LogDebug(f"Cache key: {cache_key}")
     if cache_result:
         InternalLogger.LogDebug("Cache found. Returning cached result.")
+        ads_found = len(cache_result["content"])
+        InternalLogger.LogDebug(f"Writing statistics to Dynamodb: {ads_found}")
+        insert_resolver_result_task(seed_data["task_id"], "otomoto", ads_found=str(ads_found))
+        InternalLogger.LogDebug("Statistics written to Dynamodb")
         result_writer_service.write_result(cache_result, key="{}/{}/{}.json".format(seed_data["task_id"], "otomoto", "result"))
         return 0
 
@@ -36,12 +40,19 @@ def startup_api_scraper(seed_data_resolver: SeedDataResolver, result_writer_serv
         "task_id": seed_data["task_id"],
         "content": [page for page in add_data if page]
     }
+    InternalLogger.LogDebug("Writing statistics to Dynamodb")
+    insert_resolver_result_task(seed_data["task_id"], "otomoto", ads_found=str(len(add_data)))
+    InternalLogger.LogDebug("Statistics written to Dynamodb")
+
+    InternalLogger.LogDebug("Writing result to S3")
     result_writer_service.write_result(s3_content, key="{}/{}/{}.json".format(seed_data["task_id"], "otomoto", "result"))
     InternalLogger.LogDebug("Result written to S3")
-    InternalLogger.LogDebug("Writing cache to S3")
-    result_writer_service.write_cache(s3_content, key=cache_key)
-    InternalLogger.LogDebug("Cache written to S3")
 
+    InternalLogger.LogDebug("Writing cache to S3")
+    result_writer_service.write_cache(s3_content, cache_key, "otomoto")
+    InternalLogger.LogDebug("Cache written to S3")
+    
+    InternalLogger.LogDebug("Exiting.")
     return 0
 
 def extract_add_data(scraped_data: List[dict]) -> list:

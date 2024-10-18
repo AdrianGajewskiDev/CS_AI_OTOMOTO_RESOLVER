@@ -1,5 +1,8 @@
+import json
+import os
 from cs_ai_common.logging.internal_logger import InternalLogger
 
+definition_file_path = os.environ["LAMBDA_TASK_ROOT"] + "/otomoto_resolver/static_files"
 
 def build_request_body(seed_data: dict, page_number: int = 1) -> dict:
     filters = [
@@ -9,7 +12,7 @@ def build_request_body(seed_data: dict, page_number: int = 1) -> dict:
         },
         {
             "name": "filter_enum_model",
-            "value": seed_data.get("Model")
+            "value": get_model(seed_data.get("Make").lower().replace("-", "_"), seed_data.get("Model"))
         },
         {
             "name": "filter_float_year:from",
@@ -95,3 +98,16 @@ def build_request_body(seed_data: dict, page_number: int = 1) -> dict:
                 "sortBy": "created_at:desc"
             }
         }
+
+
+def get_model(make: str, custom_model: str) -> str:
+    try:
+        with open(f"{definition_file_path}/{make}_models.json") as f:
+            makes = json.load(f)
+        
+        model = [m["otomoto_key"] for m in makes if m["custom_key"] == custom_model]
+        return model[0]
+    except FileNotFoundError:
+        raise ValueError(f"File not found for make: {make}")
+    except IndexError:
+        raise ValueError(f"Model not found for make: {make} and model: {custom_model}")

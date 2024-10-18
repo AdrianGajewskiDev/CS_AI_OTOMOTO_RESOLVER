@@ -1,7 +1,6 @@
 import json
 from cs_ai_common.logging.internal_logger import InternalLogger
-from otomoto_resolver.seed_data_resolvers.seed_data_resolver import SeedDataResolver
-
+from cs_ai_common.seed_data.seed_data_resolver import SeedDataResolver
 
 class DynamoDBStreamsSeedDataResolver(SeedDataResolver):
     def __init__(self, event: dict):

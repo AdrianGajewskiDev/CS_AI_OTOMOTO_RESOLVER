@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 import uuid
-from otomoto_resolver.seed_data_resolvers.seed_data_resolver import SeedDataResolver
+from cs_ai_common.seed_data.seed_data_resolver import SeedDataResolver
 
 
 class LocalSeedDataResolver(SeedDataResolver):
