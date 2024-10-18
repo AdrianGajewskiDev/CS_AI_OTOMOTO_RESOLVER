@@ -3,17 +3,17 @@ import os
 
 import requests
 
-from otomoto_resolver.clients.oxylabs_proxy_api_client import OxylabsProxyApiClient
 from cs_ai_common.logging.internal_logger import InternalLogger
-
+from cs_ai_common.proxy.proxy_client import ProxyApiClient
+from cs_ai_common.typings.proxy import ProxyProviders
 
 class OtomotoApiClient:
     _base_url: str
-    proxy_api_client: OxylabsProxyApiClient
+    proxy_api_client: ProxyApiClient
 
     def __init__(self):
         self._base_url = os.getenv("OTOMOTO_BASE_URL")
-        self.proxy_api_client = OxylabsProxyApiClient()
+        self.proxy_api_client = ProxyApiClient(ProxyProviders.OXYLABS)
 
     def query_otomoto_ads(self, body: dict) -> requests.Response:
         entry = self.proxy_api_client.get_proxy_ip()
