@@ -8,7 +8,7 @@ from cs_ai_common.logging.internal_logger import InternalLogger
 from otomoto_resolver.models.fuel_types import map_fuel_type
 from otomoto_resolver.models.resolver_rules import FieldTypes, NamedFields, ResolverStrategy, TypedResolverRule
 from otomoto_resolver.models.transmissions import map_transmission
-from otomoto_resolver.response_models.resolver_response import ResolverResponse
+from cs_ai_common.models.resolvers import ResolverResponse
 
 class Resolver():
     _resolved_url: str

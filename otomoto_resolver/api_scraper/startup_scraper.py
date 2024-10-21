@@ -3,12 +3,12 @@ from typing import Any, List
 from otomoto_resolver.api_scraper.execute_scraper import execute_api_scraper
 from otomoto_resolver.factories.otomot_resolver_factory import create_otomoto_api_resolver
 from cs_ai_common.logging.internal_logger import InternalLogger
-from otomoto_resolver.response_models.resolver_response import ResolverResponse
 from cs_ai_common.seed_data.seed_data_resolver import SeedDataResolver
 from cs_ai_common.typings.car_utils import Transmisions, FuelTypes
 from cs_ai_common.services.result_writer_service import ResultWriterService
 from cs_ai_common.resolver_cache.try_get_cache import try_get_cache
 from cs_ai_common.dynamodb.resolver_task_table import insert_resolver_result_task
+from cs_ai_common.models.resolvers import ResolverResponse
 
 def startup_api_scraper(seed_data_resolver: SeedDataResolver, result_writer_service: ResultWriterService) -> None:
     seed_data = seed_data_resolver.get_seed_data()
@@ -34,7 +34,7 @@ def startup_api_scraper(seed_data_resolver: SeedDataResolver, result_writer_serv
 
     InternalLogger.LogDebug(f"Writing result to S3")
     
-    add_data = extract_add_data(scraped_data)
+    add_data = extract_add_data(scraped_data, seed_data["seed_data"])
     
     s3_content = {
         "task_id": seed_data["task_id"],
@@ -55,7 +55,7 @@ def startup_api_scraper(seed_data_resolver: SeedDataResolver, result_writer_serv
     InternalLogger.LogDebug("Exiting.")
     return 0
 
-def extract_add_data(scraped_data: List[dict]) -> list:
+def extract_add_data(scraped_data: List[dict], seed_data: dict) -> list:
     add_data = []
     for page in scraped_data:
 
@@ -91,7 +91,12 @@ def extract_add_data(scraped_data: List[dict]) -> list:
                     HorsePower=get_from_params(node["parameters"], "engine_power"),
                     Capacity=get_from_params(node["parameters"], "engine_capacity"),
                     AdvertisementLink=node["url"],
-                    Thumbnails=[node.get("thumbnail", {}).get("x1", ""), node.get("thumbnail", {}).get("x2", "")] if isinstance(node.get("thumbnail"), dict) else []
+                    Thumbnails=[node.get("thumbnail", {}).get("x1", ""), node.get("thumbnail", {}).get("x2", "")] if isinstance(node.get("thumbnail"), dict) else [],
+                    Make=seed_data["Make"],
+                    Model=seed_data["Model"],
+                    SourceId="OTOMOTO",
+                    LocationCountry="PL",
+                    LocationCity=_get_city_details(node)
                 ).json())
 
     return add_data
@@ -102,3 +107,12 @@ def get_from_params(parameters: dict, key: str, default: Any | str = "") -> str:
             return param["value"]
 
     return default
+
+def _get_city_details(data: dict) -> str:
+    location = data.get("location", {})
+    if not location:
+        return ""
+    city = location.get("city", "")
+    if not city or not isinstance(city, dict):
+        return ""
+    return json.dumps(city)
