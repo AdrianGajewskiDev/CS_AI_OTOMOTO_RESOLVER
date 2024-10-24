@@ -30,7 +30,7 @@ def startup_api_scraper(seed_data_resolver: SeedDataResolver, result_writer_serv
         return 0
 
     resolver  = create_otomoto_api_resolver()
-    scraped_data = list(execute_api_scraper(resolver, seed_data["seed_data"]))
+    scraped_data = list(execute_api_scraper(resolver, seed_data["seed_data"], seed_data["filter"]))
 
     InternalLogger.LogDebug(f"Writing result to S3")
     
@@ -58,7 +58,9 @@ def startup_api_scraper(seed_data_resolver: SeedDataResolver, result_writer_serv
 def extract_add_data(scraped_data: List[dict], seed_data: dict) -> list:
     add_data = []
     for page in scraped_data:
-
+        if not page:
+            InternalLogger.LogDebug("No page found. Skipping.")
+            continue
         edges = page.get("data", {}).get("advertSearch", {}).get("edges")
 
         if not edges:

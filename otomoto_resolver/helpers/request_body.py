@@ -1,10 +1,10 @@
 import json
 import os
 from cs_ai_common.logging.internal_logger import InternalLogger
-
+from cs_ai_common.models.filters import Filter
 definition_file_path = os.environ["LAMBDA_TASK_ROOT"] + "/otomoto_resolver/static_files"
 
-def build_request_body(seed_data: dict, page_number: int = 1) -> dict:
+def build_request_body(seed_data: dict, filter: Filter, page_number: int = 1) -> dict:
     filters = [
         {
             "name": "filter_enum_make",
@@ -15,33 +15,17 @@ def build_request_body(seed_data: dict, page_number: int = 1) -> dict:
             "value": get_model(seed_data.get("Make").lower().replace("-", "_"), seed_data.get("Model"))
         },
         {
-            "name": "filter_float_year:from",
-            "value": str(int(seed_data.get("ProductionYear")) - 2)
-        },
-        {
-            "name": "filter_float_year:to",
-            "value": str(int(seed_data.get("ProductionYear")) + 2)
-        },
-        {
-            "name": "filter_float_mileage:from",
-            "value": "0"
-        },
-        {
-            "name": "filter_float_mileage:to",
-            "value": str(int(seed_data.get("Mileage")) + 200000)
-        },
-        {
             "name": "order",
             "value": "created_at:desc"
         }
     ]
 
-    generation = seed_data.get("Generation", "")
-    if generation:
-        filters.append({
-            "name": "filter_enum_generation",
-            "value": seed_data.get("Generation")
-        })
+
+    if filter.min_year:
+        filters.append({"name": "filter_float_year:from", "value": str(filter.min_year)})
+
+    if filter.max_year:
+        filters.append({"name": "filter_float_year:to", "value": str(filter.max_year)})
 
     InternalLogger.LogDebug(f"Building request body with filters: {filters}")
     
